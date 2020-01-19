@@ -33,9 +33,10 @@ foreach ($requestedIndex['sensordatavalues'] as $item) {
     }
 }
 
-echo $timestamp." ";
+$message  = $timestamp.' ';
 foreach ($filteredSensorData as $key => $value) {
-    echo $key.": ".$value." ";
+    $message .= $key.": ".$value." ";
 }
-echo "\n";
 
+
+fwrite(STDOUT, $message);
