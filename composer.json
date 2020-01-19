@@ -6,11 +6,11 @@
     "type": "project",
     "require": {
         "php": "^7.2",
-        "friendsofphp/php-cs-fixer": "^2.16",
         "vlucas/phpdotenv": "^4.1"
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
+        "friendsofphp/php-cs-fixer": "^2.16",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^8.0"
     },
