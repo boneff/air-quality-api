@@ -2,8 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Prepare') {
+        stage ('Install composer') {
             steps {
+                sh './build/install-composer.sh'
+            }
+        }
+        stage('Prepare - install dependencies, copy default config') {
+            steps {
+                sh 'cp .env.example .env'
                 sh 'composer install'
                 sh 'rm -rf build/logs'
                 sh 'mkdir build/logs'
