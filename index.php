@@ -14,7 +14,28 @@ $sensorId = isset($argv[2]) && is_int($argv[2]) ? $argv[2] : getenv('API_SENSOR_
 
 $requestUrl = getenv('API_BASE_URL').getenv('API_SENSOR_ENDPOINT').$sensorId.DIRECTORY_SEPARATOR;
 
-echo $requestUrl;
+$handle = curl_init();
+curl_setopt($handle, CURLOPT_URL, $requestUrl);
+// Set the result output to be a string.
+curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+$data = curl_exec($handle);
+curl_close($handle);
 
+$arrayData = json_decode($data, JSON_OBJECT_AS_ARRAY);
 
+$requestedIndex = $arrayData[getenv('STARTING_INDEX')];
+$timestamp = $requestedIndex['timestamp'];
+$requestedValueTypes = explode(',', getenv('REQUESTED_VALUE_TYPES'));
+$filteredSensorData = [];
+foreach ($requestedIndex['sensordatavalues'] as $item) {
+    if (in_array($item['value_type'], $requestedValueTypes)) {
+        $filteredSensorData[$item['value_type']] = $item['value'];
+    }
+}
+
+echo $timestamp." ";
+foreach ($filteredSensorData as $key => $value) {
+    echo $key.": ".$value." ";
+}
+echo "\n";
 
