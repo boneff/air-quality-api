@@ -10,7 +10,6 @@ pipeline {
                 sh 'mkdir build/logs'
             }
         }
-        stage('PHP Syntax check') { steps { sh 'vendor/bin/parallel-lint --exclude vendor/ .' } }
         stage('Test'){
             steps {
                 sh 'vendor/bin/phpunit -c phpunit.xml || exit 0'
