@@ -21,10 +21,16 @@ docker-compose up
 docker run -it -v $(pwd):/application  airqualityapi_php-cli:latest php index.php
 ```
 
+### Jenkins integration 
+If Jenkins is set up with the ability to run Docker in it (if we deploy Jenkins as a Docker image - there are some extra steps), this command line script could be ran just like we run it locally. \
+If there are issues with running Docker in Jenkins - the repo contains a Jenkinsfile which builds the project and runs it without Docker.
+There should be PHP and Composer already installed on Jenkins.
+
+
 #### Testing
-In the PHP-FPM container run the following:
+In the PHP-CLI container run the following:
 ```
-vendor/bin/phpunit
+docker run -it -v $(pwd):/application  airqualityapi_php-cli:latest vendor/bin/phpunit
 ```
 #### Built with
 * [Docker](https://www.docker.com/) 
