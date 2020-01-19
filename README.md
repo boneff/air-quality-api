@@ -23,6 +23,8 @@ docker run -it -v $(pwd):/application  airqualityapi_php-cli:latest php index.ph
 
 ### Jenkins integration 
 If Jenkins is set up with the ability to run Docker in it (if we deploy Jenkins as a Docker image - there are some extra steps), this command line script could be ran just like we run it locally. \
+Further reading on running Docker inside a Dockerized Jenkins [Nestybox](https://blog.nestybox.com/2019/09/29/jenkins.html)
+
 If there are issues with running Docker in Jenkins - the repo contains a Jenkinsfile which builds the project and runs it without Docker.
 There should be PHP and Composer already installed on Jenkins.
 
