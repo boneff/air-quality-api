@@ -26,6 +26,7 @@ If Jenkins is set up with the ability to run Docker in it (if we deploy Jenkins 
 If there are issues with running Docker in Jenkins - the repo contains a Jenkinsfile which builds the project and runs it without Docker.
 There should be PHP and Composer already installed on Jenkins.
 
+Such a custom image of Jenkins can be found [here](https://hub.docker.com/repository/docker/boneff/jenkins-docker-php).
 
 #### Testing
 In the PHP-CLI container run the following:

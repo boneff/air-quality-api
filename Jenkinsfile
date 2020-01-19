@@ -2,11 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage ('Install composer') {
-            steps {
-                sh './build/install-composer.sh'
-            }
-        }
         stage('Prepare - install dependencies, copy default config') {
             steps {
                 sh 'cp .env.example .env'
