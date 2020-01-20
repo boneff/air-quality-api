@@ -30,6 +30,12 @@ class AirQualityApiServiceTest extends TestCase
     public function testGetDataSuccessfully()
     {
         $apiData = json_decode(file_get_contents(__DIR__."/sensor-data-9202.json"));
+
+        //explicitly set config values so we do not produce a flaky test
+        putenv('API_SENSOR_DEFAULT_ID=9202');
+        putenv('STARTING_INDEX=1');
+        putenv('REQUESTED_VALUE_TYPES=P1,P2');
+
         $this->client
             ->expects($this->once())
             ->method('call')
