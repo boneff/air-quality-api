@@ -77,28 +77,4 @@ class AirQualityApiDataParser
 
         return $fileteredData;
     }
-
-    public function __toString()
-    {
-        return $this->createStringFromArray($this->parsedFields);
-    }
-
-    /**
-     * @param array $array
-     *
-     * @return string
-     */
-    private function createStringFromArray(array $array)
-    {
-        $message  = '';
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $message .= $this->createStringFromArray($value);
-                continue;
-            }
-            $message .= $key.": ".$value." ";
-        }
-
-        return $message;
-    }
 }

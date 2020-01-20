@@ -31,9 +31,9 @@ class AirQualityApiService
     {
         $data = $this->client->call($this->buildRequestUrl($argv));
 
-        $this->parser->parseRequestedFields($data, ['timestamp', 'sensordatavalues']);
+        $parsedFields = $this->parser->parseRequestedFields($data, ['timestamp', 'sensordatavalues']);
 
-        return $this->parser->__toString();
+        return $this->createStringFromArray($parsedFields);
     }
 
     /**
@@ -45,5 +45,24 @@ class AirQualityApiService
         $requestUrl = getenv('API_BASE_URL').getenv('API_SENSOR_ENDPOINT').$sensorId.DIRECTORY_SEPARATOR;
 
         return $requestUrl;
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return string
+     */
+    private function createStringFromArray(array $array)
+    {
+        $message  = '';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $message .= $this->createStringFromArray($value);
+                continue;
+            }
+            $message .= $key.": ".$value." ";
+        }
+
+        return $message;
     }
 }

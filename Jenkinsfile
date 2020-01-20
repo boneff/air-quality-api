@@ -5,7 +5,7 @@ pipeline {
         stage('Prepare - install dependencies, copy default config') {
             steps {
                 sh 'cp .env.example .env'
-                sh 'composer install --no-dev'
+                sh 'composer install'
             }
         }
         stage('Test'){
