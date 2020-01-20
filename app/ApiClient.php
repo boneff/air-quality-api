@@ -18,7 +18,7 @@ class ApiClient
         $data = curl_exec($handle);
         curl_close($handle);
 
-        return json_decode($data, JSON_OBJECT_AS_ARRAY);
+        return json_decode($data, true);
     }
 
     /**

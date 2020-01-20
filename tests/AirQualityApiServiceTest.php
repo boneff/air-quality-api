@@ -29,7 +29,7 @@ class AirQualityApiServiceTest extends TestCase
 
     public function testGetDataSuccessfully()
     {
-        $apiData = json_decode(file_get_contents(__DIR__."/sensor-data-9202.json"));
+        $apiData = json_decode(file_get_contents(__DIR__."/sensor-data-9202.json"), true);
 
         //explicitly set config values so we do not produce a flaky test
         putenv('API_SENSOR_DEFAULT_ID=9202');
