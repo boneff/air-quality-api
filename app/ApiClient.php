@@ -2,27 +2,22 @@
 
 namespace App;
 
-class APIClient
+class ApiClient
 {
-    private $url;
-
-    public function __construct(string $url)
-    {
-        $this->url = $url;
-    }
-
     /**
+     * @param string $url
+     *
      * @return array|bool
      */
-    public function call()
+    public function call(string $url)
     {
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, $this->url);
+        curl_setopt($handle, CURLOPT_URL, $url);
         // Set the result output to be a string.
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         $data = curl_exec($handle);
         curl_close($handle);
 
-        return json_decode($data, JSON_OBJECT_AS_ARRAY);;
+        return json_decode($data, JSON_OBJECT_AS_ARRAY);
     }
 }

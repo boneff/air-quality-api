@@ -4,46 +4,45 @@ namespace App;
 
 class AirQualityApiDataParser
 {
+    private $parsedFields;
+
+    public function __construct()
+    {
+        $this->parsedFields = [];
+    }
+
     /**
      * @param array $data
-     * @param null $index
+     * @param array $requestedFields
      *
      * @return array
      *
      * @throws \Exception
      */
-    public function parse(array $data, $index = null)
+    public function parseRequestedFields(array $data, array $requestedFields = [])
     {
-        $requestedIndex = $this->getRequestedIndex($data, $index);
-        $requestedValueTypes = explode(',', getenv('REQUESTED_VALUE_TYPES'));
-        $filteredSensorData = [];
+        $requestedData = $this->getRequestedDataByIndex($data);
 
-        $filteredSensorData['timestamp'] = $this->readField($requestedIndex, 'timestamp');
-        foreach ($this->readField($requestedIndex, 'sensordatavalues') as $item) {
-            $itemValueType = $this->readField($item, 'value_type');
-            $itemValue = $this->readField($item, 'value');
-
-            if (in_array($itemValueType, $requestedValueTypes)) {
-                $filteredSensorData[$itemValueType] = $itemValue;
-            }
+        foreach ($requestedFields as $fieldName) {
+            $this->parsedFields[$fieldName] =
+                ('sensordatavalues' === $fieldName)
+                    ? $this->parseSensorDataValues($requestedData[$fieldName])
+                    : $this->readField($requestedData, $fieldName);
         }
 
-        return $filteredSensorData;
+        return $this->parsedFields;
     }
 
     /**
      * @param array $data
-     * @param null $index
      *
      * @return mixed|null
      *
      * @throws \Exception
      */
-    private function getRequestedIndex(array $data, $index = null)
+    private function getRequestedDataByIndex(array $data)
     {
-        $index = (null !== $index) ? $index : getenv('STARTING_INDEX');
-
-        return $this->readField($data, $index);
+        return $this->readField($data, getenv('STARTING_INDEX'));
     }
 
     /**
@@ -60,5 +59,46 @@ class AirQualityApiDataParser
             throw new \Exception('Tried reading non-existent field: '.$fieldName);
         }
         return $data[$fieldName];
+    }
+
+    private function parseSensorDataValues(array $sensorDataValues)
+    {
+        $fileteredData = [];
+        $requestedValueTypes = explode(',', getenv('REQUESTED_VALUE_TYPES'));
+
+        foreach ($sensorDataValues as $item) {
+            $itemValueType = $this->readField($item, 'value_type');
+            $itemValue = $this->readField($item, 'value');
+
+            if (in_array($itemValueType, $requestedValueTypes)) {
+                $fileteredData[$itemValueType] = $itemValue;
+            }
+        }
+
+        return $fileteredData;
+    }
+
+    public function __toString()
+    {
+        return $this->createStringFromArray($this->parsedFields);
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return string
+     */
+    private function createStringFromArray(array $array)
+    {
+        $message  = '';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $message .= $this->createStringFromArray($value);
+                continue;
+            }
+            $message .= $key.": ".$value." ";
+        }
+
+        return $message;
     }
 }
