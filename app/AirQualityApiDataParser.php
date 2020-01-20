@@ -21,6 +21,7 @@ class AirQualityApiDataParser
      */
     public function parseRequestedFields(array $data, array $requestedFields = [])
     {
+        $this->orderDataByField($data, 'timestamp');
         $requestedData = $this->getRequestedDataByIndex($data);
 
         foreach ($requestedFields as $fieldName) {
@@ -76,5 +77,17 @@ class AirQualityApiDataParser
         }
 
         return $fileteredData;
+    }
+
+    /**
+     * @param array $data
+     * @param string $fieldName
+     * @return bool
+     */
+    private function orderDataByField(array $data, string $fieldName)
+    {
+        return uasort($data, function($value1, $value2) use ($fieldName) {
+            return $value1[$fieldName] <= $value2[$fieldName] ? -1 : 1;
+        });
     }
 }
